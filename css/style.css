@@ -1,0 +1,11 @@
+#topnewsSection{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(306px, 1fr));
+    grid-gap: 1.5rem;
+}
+
+#topnewsSection a:hover .card-title{
+    text-decoration: underline;
+}
+
+/* @media (max-width: ) */
