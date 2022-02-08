@@ -7,17 +7,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 </div>`
 });
 
-let xhr = new XMLHttpRequest()
-xhr.open('GET', `https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}`, true);
-xhr.onload = function () {
-    result = JSON.parse(xhr.responseText).articles;
-    console.log(result);
-    if (xhr.status === 200) {
-        let topNews = JSON.parse(xhr.responseText);
-        topNewsDom = '';
-        topNews.articles.forEach(function (element) {
-            topNewsHtml = '';
-            topNewsHtml += `<a class="text-decoration-none" style="color: unset;" href="${element.url}">
+async function topNewsApi() {
+    let response = await fetch(`https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}`);
+    let data = response.json();
+    return data;
+}
+
+let a = topNewsApi();
+a.then((data) => {
+    let topNews = data;
+    topNewsDom = '';
+    topNews.articles.forEach(function (element) {
+        topNewsHtml = '';
+        topNewsHtml += `<a class="text-decoration-none" style="color: unset;" href="${element.url}">
                                 <div class="card">
                                     <img src="${element.urlToImage}" class="card-img-top" alt="">
                                     <div class="card-body">
@@ -28,9 +30,9 @@ xhr.onload = function () {
                                     </div>
                                 </div>
                             </a>`
-            topNewsDom += topNewsHtml;
-        });
-        topnewsSection.innerHTML = topNewsDom;
-    }
-}
-xhr.send();
+        topNewsDom += topNewsHtml;
+    });
+    topnewsSection.innerHTML = topNewsDom;
+}).catch(()=>{
+    topnewsSection.innerHTML = 'Some error occured';
+})
